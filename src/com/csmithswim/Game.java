@@ -1,22 +1,37 @@
 package com.csmithswim;
+import java.util.ArrayList;
 import java.util.Scanner;
+import com.csmithswim.Deck;
 
 
 public class Game {
 
-    int[] players;
+    protected String[] players = {"Tom", "Jerry"};
 
-    Deck deck;
+    protected ArrayList<Card> playerOneHand;
+    protected ArrayList<Card> playerTwoHand;
 
-    public void run () {
-        Scanner scanner = new Scanner(System.in);
+
+
+    protected void run () {
+
         Deck deck = new Deck();
 
-        deck.createAndShuffleDeck();
+        playerOneHand = deck.dealToPlayer();
+//        playerTwoHand = deck.dealToPlayer();
 
+        displayHand();
         deck.displayDeck();
+        deck.displayDeckLength();
 
 
+    }
 
+    protected void displayHand() {
+        StringBuilder output = new StringBuilder("");
+        for (Card card : playerOneHand) {
+            output.append(card.RANK).append(" of ").append(card.SUIT).append("\n");
+        }
+        System.out.println(output);
     }
 }

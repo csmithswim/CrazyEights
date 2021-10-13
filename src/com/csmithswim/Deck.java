@@ -1,46 +1,52 @@
 package com.csmithswim;
 
-import java.util.Random;
+import java.util.ArrayList;
+import java.util.Collections;
 
 public class Deck {
 
-    protected Card card;
-    protected Card[] deck = new Card[52];
+    protected Card            card;
+    protected ArrayList<Card> dealingDeck = new ArrayList<>();
+    protected ArrayList<Card> discardDeck = new ArrayList<>();
+
+
+    protected Deck() {
+        createAndShuffleDeck();
+    }
+
+    //Eventually refactor this into the game constructor or createAndShuffleDeck method
+    protected ArrayList<Card> dealToPlayer() {
+        ArrayList<Card> playersHand = new ArrayList<>();
+
+        for (int i = 0, j = 51; i < 8 && j > 43; i++, j--) {
+            playersHand.add(dealingDeck.get(j));
+            dealingDeck.remove(j);
+
+        }
+        System.out.println();;
+        return playersHand;
+    }
 
     protected void createAndShuffleDeck() {
 
         //building the deck, starting the loop by suit in outer loop, inner loop with rank
-        int counter = 0;
         for (SUIT suit : SUIT.values()){
             for (RANK rank : RANK.values()) {
-                deck[counter] = new Card(suit, rank);
-                counter++;
+                dealingDeck.add(new Card(suit, rank));
             }
         }
-
-        //shuffling deck using a random index variable and swapping the values in the deck
-        Random random = new Random();
-
-        for (int i = 0; i < deck.length;  i++) {
-            int randomIndex = random.nextInt(52);
-
-            //cards to be swapped
-            Card sortedCard = deck[i];
-            Card randomCard = deck[randomIndex];
-
-            //swapping
-            deck[randomIndex] = sortedCard;
-            deck[i] = randomCard;
-
-        }
-
+        Collections.shuffle(dealingDeck);
     }
 
     protected void displayDeck() {
         StringBuilder output = new StringBuilder();
-        for (Card card : deck) {
+        for (Card card : dealingDeck) {
             output.append(card.RANK).append(" of ").append(card.SUIT).append("\n");
         }
         System.out.println(output);
+    }
+
+    protected void displayDeckLength() {
+        System.out.println(dealingDeck.size());
     }
 }

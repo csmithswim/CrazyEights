@@ -24,8 +24,8 @@ Online versions allow a sort/display of each player's hands
 TODO
 [x]make deck
 [x]display deck
-[]create players
-[]have players draw cards
+[x]create players
+[x]have players draw cards
 []have players discard cards
 
 

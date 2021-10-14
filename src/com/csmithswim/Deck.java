@@ -7,7 +7,6 @@ public class Deck {
 
     protected Card            card;
     protected ArrayList<Card> dealingDeck = new ArrayList<>();
-    protected ArrayList<Card> discardDeck = new ArrayList<>();
 
 
     protected Deck() {
@@ -15,16 +14,21 @@ public class Deck {
     }
 
     //Eventually refactor this into the game constructor or createAndShuffleDeck method
-    protected ArrayList<Card> dealToPlayer() {
+    protected ArrayList<Card> initialDraw() {
         ArrayList<Card> playersHand = new ArrayList<>();
 
-        for (int i = 0, j = 51; i < 8 && j > 43; i++, j--) {
+        for (int i = 0, j = dealingDeck.size() - 1; i < 8 && j > dealingDeck.size() - 8; i++, j--) {
             playersHand.add(dealingDeck.get(j));
             dealingDeck.remove(j);
-
         }
         System.out.println();;
         return playersHand;
+    }
+
+    protected Card drawCard() {
+        Card card =  dealingDeck.get(dealingDeck.size() - 1);
+        dealingDeck.remove(dealingDeck.size() - 1);
+        return card;
     }
 
     protected void createAndShuffleDeck() {
@@ -44,6 +48,7 @@ public class Deck {
             output.append(card.RANK).append(" of ").append(card.SUIT).append("\n");
         }
         System.out.println(output);
+        System.out.println(dealingDeck.size());
     }
 
     protected void displayDeckLength() {

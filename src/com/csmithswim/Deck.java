@@ -17,7 +17,7 @@ public class Deck {
     protected ArrayList<Card> initialDraw() {
         ArrayList<Card> playersHand = new ArrayList<>();
 
-        for (int i = 0, j = dealingDeck.size() - 1; i < 8 && j > dealingDeck.size() - 8; i++, j--) {
+        for (int i = 0, j = dealingDeck.size() - 1; i < 20 && j > dealingDeck.size() - 20; i++, j--) {
             playersHand.add(dealingDeck.get(j));
             dealingDeck.remove(j);
         }

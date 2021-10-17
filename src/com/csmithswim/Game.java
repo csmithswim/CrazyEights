@@ -1,46 +1,90 @@
 package com.csmithswim;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Scanner;
 
 public class Game {
 
-//    protected String[] players = {"Tom", "Jerry"};
-
-    protected ArrayList<Card> playerOneHand = new ArrayList<>();
-    protected ArrayList<Card> playerTwoHand = new ArrayList<>();
-
+    protected int numberOfPlayers;
+    protected ArrayList<String> players = new ArrayList<>();
+    protected ArrayList<ArrayList<Card> > hands = new ArrayList<>();
     protected ArrayList<Card> discardPile = new ArrayList<>();
-
-    //Card to test conditionals is always discardDeck.get(discardDeck.size() - 1)
-
-    //A card can be discarded onto discardPile IF suite matches || rank matches || rank == 8
-
+    protected Deck            dealingDeck = new Deck();
 
     protected void run () {
 
+
+
         Scanner scanner = new Scanner(System.in);
-        Deck deck = new Deck();
 
-//        deck.displayDeck();
+        addPlayers();
 
-        playerOneHand = deck.initialDraw();
+        for (String player : players) {
+            hands.add(dealingDeck.initialDraw());
+        }
 
-        discardPile.add(deck.drawCard());
+        System.out.println(hands);
+        dealingDeck.displayDeckLength();
+
+        discardPile.add(dealingDeck.drawCard());
+
+        while (players.size() > 1) {
+
+
+
+            runRound();
+
+
+
+        }
+
+
+    }
+
+    protected void runRound() {
+        for (int i = 0; i < players.size(); i = i % players.size()) {
+            System.out.println(i);
+            runTurn(i);
+            i++;
+        }
+    }
+
+    protected void runTurn(int player) {
+        System.out.println(players.get(player));
+
+        Scanner scanner = new Scanner(System.in);
 
         displayDiscardPile(discardPile);
 
-        playerOneHand.add(deck.drawCard());
+        displayHand(hands.get(player));
 
-        displayHand(playerOneHand);
+        System.out.print("1.Discard\n2.Draw\n");
 
-        System.out.println("What card do you want to remove? Enter each one separated by spaces.");
         String input = scanner.nextLine();
 
+        if ("1".equals(input)) {
+            System.out.print("What card do you want to remove? Enter each one separated by spaces.\n");
+            String cardInput = scanner.nextLine();
+            discardCard(cardInput, hands.get(player));
+        } else if ("2".equals(input)) {
+            hands.get(player).add(dealingDeck.drawCard());
+        }
+        System.out.println(dealingDeck.deck.size());
+        displayDiscardPile(discardPile);
+    }
 
-        discardCard(input, playerOneHand);
+    protected ArrayList<String> addPlayers() {
+        Scanner scanner = new Scanner(System.in);
 
-        displayHand(playerOneHand);
+        System.out.println("How many players?");
+        int numberOfPlayers = scanner.nextInt();
+        scanner.nextLine();
+        for (int i = 1; i <= numberOfPlayers; i++) {
+            System.out.println("Player " + i + ": ");
+            String name = scanner.nextLine();
+            players.add(name);
+
+        }
+        return players;
     }
 
     protected void displayHand(ArrayList<Card> hand) {
@@ -55,43 +99,8 @@ public class Game {
 
     protected void displayDiscardPile(ArrayList<Card> discardPile) {
         StringBuilder output = new StringBuilder("Discard Pile: ");
-        for (Card card : discardPile) {
-            output.append(card.RANK).append(" of ").append(card.SUIT).append("\n");
-        }
+        output.append(discardPile.get(discardPile.size() - 1).RANK).append(" of ").append(discardPile.get(discardPile.size() - 1).SUIT).append("\n");
         System.out.println(output);
-    }
-
-    protected boolean validateDiscardSelection(String input, ArrayList<Card> hand) {
-        String[] inputArray = input.split(" ");
-
-        boolean flag = true;
-        //rankCount > 1
-        //suitCount < 2
-
-        int rankCount = 0;
-        int suitCount = 0;
-        Card[] inputCardArray = new Card[inputArray.length];
-        for (int i = 0; i < inputArray.length; i++) {
-            inputCardArray[i] = hand.get(Integer.parseInt(inputArray[i]) -1);
-        }
-
-        for (int i = 0; i < inputCardArray.length; i++) {
-            for (int j = 0; j < inputCardArray.length; j++) {
-                if (inputCardArray[i].RANK == inputCardArray[j].RANK){
-                    rankCount++;
-                    break;
-                }
-            }
-        }
-        System.out.println("Rank count: " + rankCount);
-        System.out.println("Suit count: " + suitCount);
-        System.out.println(inputCardArray.length);
-        System.out.println(!input.isEmpty());
-        if (rankCount != inputCardArray.length || input.isEmpty()) {
-            System.out.println("Invalid choices, rank count must equal to input length");
-            flag = false;
-        }
-        return flag;
     }
 
     protected ArrayList<Card> discardCard(String input, ArrayList<Card> hand) {
@@ -118,25 +127,32 @@ public class Game {
         }
 
         for (Card inputCard : cardInputArray) {
-            if (inputCard.RANK == discardPile.get(discardPile.size() - 1).RANK) {
-                hand.remove(hand.indexOf(inputCard));
+            if (inputCard.RANK == RANK.EIGHT) {
+                while (true) {
+                    System.out.print("What suit do you want to change to? Options are HEARTS/CLUBS/SPADES/DIAMONDS\n");
+                    Scanner scanner   = new Scanner(System.in);
+                    String  suitInput = scanner.nextLine().toUpperCase();
+                    if ("hearts".equalsIgnoreCase(suitInput) || "clubs".equalsIgnoreCase(suitInput)
+                            || "spades".equalsIgnoreCase(suitInput) || "diamonds".equalsIgnoreCase(suitInput)) {
+                        discardPile.add(inputCard);
+                        discardPile.get(discardPile.size() - 1).SUIT = SUIT.valueOf(suitInput);
+                        hand.remove(hand.indexOf(inputCard));
+                        break;
+                    }
+                }
             } else if (inputCard.SUIT == discardPile.get(discardPile.size() - 1).SUIT) {
                 hand.remove(hand.indexOf(inputCard));
-            } else if (inputCard.RANK == RANK.EIGHT) {
+                discardPile.add(inputCard);
+            } else if (inputCard.RANK == discardPile.get(discardPile.size() - 1).RANK) {
+                discardPile.add(inputCard);
                 hand.remove(hand.indexOf(inputCard));
             } else {
-                System.out.println("Invalid entry! These cards do not match discard pile!");
+                System.out.println("Invalid entry!");
             }
         }
         return hand;
     }
 }
-
-
-
-        //Allow for multiple cards of the same RANK to be discarded
-        //Implement a system to change the suit when an 8 is played
-
 
 
 

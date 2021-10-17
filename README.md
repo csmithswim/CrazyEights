@@ -22,9 +22,9 @@ The deck gets shuffled once it is gone.
 Online versions allow a sort/display of each player's hands
 
 TODO
-[]Implement statement that allows the discard pile's suit to be changed IF an eight is discarded.
-[]Add looping structure to allow a player to discard cards until their hand's size is <= 0
-[]Declare and initialize multiple players
-[]Add a method that loops through players and ends the game when a player's hand size is <= 0
+[x]Implement statement that allows the discard pile's suit to be changed IF an eight is discarded.
+[x]Add looping structure to allow a player to discard cards until their hand's size is <= 0
+[x]Declare and initialize multiple players
+[x]Add a method that loops through players and ends the game when a player's hand size is <= 0
 []Adjust scanner input/output to be more readable 
 []chill......

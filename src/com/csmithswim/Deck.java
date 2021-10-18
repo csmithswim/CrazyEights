@@ -21,7 +21,6 @@ public class Deck {
             playersHand.add(deck.get(j));
             deck.remove(j);
         }
-        System.out.println();;
         return playersHand;
     }
 
@@ -44,6 +43,11 @@ public class Deck {
         Collections.shuffle(deck);
         Collections.shuffle(deck);
         Collections.shuffle(deck);
+        Collections.shuffle(deck);
+        Collections.shuffle(deck);
+        Collections.shuffle(deck);
+        Collections.shuffle(deck);
+        Collections.shuffle(deck);
     }
 
     protected void displayDeck() {
@@ -55,7 +59,11 @@ public class Deck {
         System.out.println(deck.size());
     }
 
-    protected void displayDeckLength() {
-        System.out.println(deck.size());
+    protected void removeCard(Card card) {
+        deck.remove(card);
+    }
+
+    protected int displayDeckLength() {
+        return deck.size();
     }
 }

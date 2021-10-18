@@ -30,8 +30,7 @@ public class Card {
 
     public String toString() {
         StringBuilder output = new StringBuilder();
-        output.append(RANK).append("  ").append(SUIT);
-        System.out.println(output);
+        output.append(RANK).append(" of ").append(SUIT);
         return new String(output);
     }
 }

@@ -9,10 +9,10 @@ public class Game {
     protected ArrayList<ArrayList<Card> > hands = new ArrayList<>();
     protected ArrayList<Card> discardPile = new ArrayList<>();
     protected Deck            dealingDeck = new Deck();
+    protected boolean running = true;
+    protected StringBuilder consoleMessage = new StringBuilder();
 
     protected void run () {
-
-
 
         Scanner scanner = new Scanner(System.in);
 
@@ -22,59 +22,65 @@ public class Game {
             hands.add(dealingDeck.initialDraw());
         }
 
-        System.out.println(hands);
-        dealingDeck.displayDeckLength();
-
         discardPile.add(dealingDeck.drawCard());
 
-        while (players.size() > 1) {
-
-
-
+        while (running) {
             runRound();
-
-
-
         }
-
-
     }
 
     protected void runRound() {
         for (int i = 0; i < players.size(); i = i % players.size()) {
-            System.out.println(i);
+
             runTurn(i);
+            if (hands.get(i).size() == 0) {
+                System.out.println(players.get(i) + "Wins!!!!");
+                running = false;
+                break;
+            }
             i++;
         }
     }
 
     protected void runTurn(int player) {
-        System.out.println(players.get(player));
 
         Scanner scanner = new Scanner(System.in);
 
-        displayDiscardPile(discardPile);
+        while (true) {
+            consoleMessage.append("\n").append(players.get(player)).append("'s turn.\n\n").append("Hand: \n").append(displayHand(hands.get(player)));
+            System.out.println(consoleMessage);
+            consoleMessage.replace(0, consoleMessage.length() - 1, displayDiscardPile(discardPile));
+            System.out.println(consoleMessage);
 
-        displayHand(hands.get(player));
 
-        System.out.print("1.Discard\n2.Draw\n");
+            System.out.print("1.Discard\n2.Draw\n");
 
-        String input = scanner.nextLine();
+            String input = scanner.nextLine();
 
-        if ("1".equals(input)) {
-            System.out.print("What card do you want to remove? Enter each one separated by spaces.\n");
-            String cardInput = scanner.nextLine();
-            discardCard(cardInput, hands.get(player));
-        } else if ("2".equals(input)) {
-            hands.get(player).add(dealingDeck.drawCard());
+            if ("1".equals(input)) {
+                int flag = hands.get(player).size();
+                System.out.print("What card do you want to remove? Enter each one separated by spaces.\n");
+                String cardInput = scanner.nextLine();
+                discardCard(cardInput, hands.get(player));
+                if (flag == hands.get(player).size()) {
+                    continue;
+                }
+                break;
+            } else if ("2".equals(input)) {
+                hands.get(player).add(dealingDeck.drawCard());
+                if (dealingDeck.displayDeckLength() == 0) {
+                    dealingDeck.createAndShuffleDeck();
+                    Card card = discardPile.get(discardPile.size() - 1);
+                    dealingDeck.removeCard(card);
+                }
+                continue;
+            }
+            displayDiscardPile(discardPile);
         }
-        System.out.println(dealingDeck.deck.size());
-        displayDiscardPile(discardPile);
     }
 
     protected ArrayList<String> addPlayers() {
         Scanner scanner = new Scanner(System.in);
-
         System.out.println("How many players?");
         int numberOfPlayers = scanner.nextInt();
         scanner.nextLine();
@@ -82,25 +88,24 @@ public class Game {
             System.out.println("Player " + i + ": ");
             String name = scanner.nextLine();
             players.add(name);
-
         }
         return players;
     }
 
-    protected void displayHand(ArrayList<Card> hand) {
+    protected String displayHand(ArrayList<Card> hand) {
         StringBuilder output = new StringBuilder("");
         int counter = 1;
         for (Card card : hand) {
             output.append(counter + "  ").append(card.RANK).append(" of ").append(card.SUIT).append("\n");
             counter++;
         }
-        System.out.println(output);
+        return new String(output);
     }
 
-    protected void displayDiscardPile(ArrayList<Card> discardPile) {
+    protected String displayDiscardPile(ArrayList<Card> discardPile) {
         StringBuilder output = new StringBuilder("Discard Pile: ");
         output.append(discardPile.get(discardPile.size() - 1).RANK).append(" of ").append(discardPile.get(discardPile.size() - 1).SUIT).append("\n");
-        System.out.println(output);
+        return new String(output);
     }
 
     protected ArrayList<Card> discardCard(String input, ArrayList<Card> hand) {
@@ -147,7 +152,7 @@ public class Game {
                 discardPile.add(inputCard);
                 hand.remove(hand.indexOf(inputCard));
             } else {
-                System.out.println("Invalid entry!");
+                System.out.println("You cannot discard " + inputCard.toString());
             }
         }
         return hand;

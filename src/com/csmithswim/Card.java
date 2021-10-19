@@ -19,15 +19,6 @@ public class Card {
         this.RANK = RANK;
     }
 
-    protected SUIT getSuit(Card card) {
-        return this.SUIT;
-    }
-
-    protected RANK getRank(Card card) {
-        return this.RANK;
-    }
-
-
     public String toString() {
         StringBuilder output = new StringBuilder();
         output.append(RANK).append(" of ").append(SUIT);

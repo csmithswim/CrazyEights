@@ -13,7 +13,6 @@ public class Game {
     protected StringBuilder consoleMessage = new StringBuilder();
 
     protected void run () {
-
         Scanner scanner = new Scanner(System.in);
 
         addPlayers();
@@ -31,7 +30,6 @@ public class Game {
 
     protected void runRound() {
         for (int i = 0; i < players.size(); i = i % players.size()) {
-
             runTurn(i);
             if (hands.get(i).size() == 0) {
                 System.out.println(players.get(i) + "Wins!!!!");
@@ -49,7 +47,7 @@ public class Game {
         while (true) {
             consoleMessage.append("\n").append(players.get(player)).append("'s turn.\n\n").append("Hand: \n").append(displayHand(hands.get(player)));
             System.out.println(consoleMessage);
-            consoleMessage.replace(0, consoleMessage.length() - 1, displayDiscardPile(discardPile));
+            consoleMessage.replace(0, consoleMessage.length() - 1, "Discard pile: " + discardPile.get(discardPile.size() - 1).toString());
             System.out.println(consoleMessage);
 
 
@@ -68,14 +66,13 @@ public class Game {
                 break;
             } else if ("2".equals(input)) {
                 hands.get(player).add(dealingDeck.drawCard());
-                if (dealingDeck.displayDeckLength() == 0) {
+                if (dealingDeck.getDeckLength() == 0) {
                     dealingDeck.createAndShuffleDeck();
                     Card card = discardPile.get(discardPile.size() - 1);
                     dealingDeck.removeCard(card);
                 }
                 continue;
             }
-            displayDiscardPile(discardPile);
         }
     }
 
@@ -99,12 +96,6 @@ public class Game {
             output.append(counter + "  ").append(card.RANK).append(" of ").append(card.SUIT).append("\n");
             counter++;
         }
-        return new String(output);
-    }
-
-    protected String displayDiscardPile(ArrayList<Card> discardPile) {
-        StringBuilder output = new StringBuilder("Discard Pile: ");
-        output.append(discardPile.get(discardPile.size() - 1).RANK).append(" of ").append(discardPile.get(discardPile.size() - 1).SUIT).append("\n");
         return new String(output);
     }
 

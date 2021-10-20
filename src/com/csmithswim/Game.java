@@ -3,8 +3,6 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Game {
-
-    protected int numberOfPlayers;
     protected ArrayList<String> players = new ArrayList<>();
     protected ArrayList<ArrayList<Card> > hands = new ArrayList<>();
     protected ArrayList<Card> discardPile = new ArrayList<>();

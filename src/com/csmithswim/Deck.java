@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 public class Deck {
-
-    protected Card            card;
     protected ArrayList<Card> deck = new ArrayList<>();
 
     protected Deck() {

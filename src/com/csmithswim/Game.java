@@ -48,7 +48,6 @@ public class Game {
             consoleMessage.replace(0, consoleMessage.length() - 1, "Discard pile: " + discardPile.get(discardPile.size() - 1).toString());
             System.out.println(consoleMessage);
 
-
             System.out.print("1.Discard\n2.Draw\n");
 
             String input = scanner.nextLine();
@@ -62,12 +61,16 @@ public class Game {
                     continue;
                 }
                 break;
+
+            //Does not keep track of player's cards when reshuffles
             } else if ("2".equals(input)) {
                 hands.get(player).add(dealingDeck.drawCard());
+                //
+                Card topCard = discardPile.get(discardPile.size() - 1);
                 if (dealingDeck.getDeckLength() == 0) {
-                    dealingDeck.createAndShuffleDeck();
-                    Card card = discardPile.get(discardPile.size() - 1);
-                    dealingDeck.removeCard(card);
+                    dealingDeck.addAndShuffleDiscardPile(discardPile);
+                    discardPile.clear();
+                    discardPile.add(topCard);
                 }
                 continue;
             }

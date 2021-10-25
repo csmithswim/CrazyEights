@@ -1,5 +1,6 @@
 package com.csmithswim;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -8,6 +9,20 @@ public class Deck {
 
     protected Deck() {
         createAndShuffleDeck();
+    }
+
+    protected ArrayList<Card> addAndShuffleDiscardPile(ArrayList<Card> discardPile) {
+        if (!deck.isEmpty()) {
+            for (int i = 0; i < deck.size(); i++) {
+                deck.remove(i);
+            }
+        }
+
+        for (int i = 0; i < discardPile.size() - 1; i++) {
+            deck.add(discardPile.get(i));
+        }
+        Collections.shuffle(deck);
+        return deck;
     }
 
     protected ArrayList<Card> initialDraw() {
